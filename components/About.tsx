@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { about, hero } from "@/data/portfolio";
+import { Reveal } from "@/components/Reveal";
 
 export function About() {
   const parts = about.body.split(about.highlightName);
@@ -15,7 +16,7 @@ export function About() {
 
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div className="flex justify-center lg:justify-start">
+          <Reveal direction="left" className="flex justify-center lg:justify-start">
             <div className="relative">
               <div className="absolute left-1/2 -top-16 w-[2px] h-16 bg-black/80 -translate-x-1/2 hidden md:block" />
               <div className="absolute left-1/2 -top-3 w-8 h-3 rounded-sm bg-black -translate-x-1/2 hidden md:block" />
@@ -28,9 +29,9 @@ export function About() {
                 />
               </div>
             </div>
-          </div>
+          </Reveal>
 
-          <div>
+          <Reveal direction="right" delay={120}>
             <h2 className="text-5xl md:text-6xl font-black text-black tracking-tight">
               {about.heading}
             </h2>
@@ -52,7 +53,7 @@ export function About() {
                 />
               ))}
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
 

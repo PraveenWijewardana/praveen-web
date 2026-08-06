@@ -1,10 +1,14 @@
 import { experience } from "@/data/portfolio";
+import { Reveal } from "@/components/Reveal";
 
 export function Experience() {
   return (
     <section id="experience" className="relative bg-white py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6 md:px-12">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10">
+        <Reveal
+          direction="up"
+          className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-10"
+        >
           <div>
             <span className="inline-flex text-xs uppercase tracking-widest text-gray-400 mb-3">
               {experience.badge}
@@ -19,12 +23,14 @@ export function Experience() {
           <p className="text-gray-400 text-sm max-w-xs md:text-right">
             {experience.description}
           </p>
-        </div>
+        </Reveal>
 
         <div className="border-t border-gray-200 pt-8 space-y-4">
-          {experience.items.map((item) => (
-            <div
+          {experience.items.map((item, i) => (
+            <Reveal
               key={`${item.role}-${item.company}`}
+              direction="up"
+              delay={i * 100}
               className="flex flex-col gap-5 rounded-2xl border border-gray-200 p-5 md:p-6 hover:bg-red-50/30 transition-colors"
             >
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-3">
@@ -59,7 +65,7 @@ export function Experience() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Reveal>
           ))}
         </div>
       </div>

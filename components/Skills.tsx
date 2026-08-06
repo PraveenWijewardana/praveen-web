@@ -1,4 +1,5 @@
 import { skills } from "@/data/portfolio";
+import { Reveal } from "@/components/Reveal";
 
 export function Skills() {
   return (
@@ -8,7 +9,7 @@ export function Skills() {
 
       <div className="relative mx-auto max-w-7xl px-6 md:px-12">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-12 md:mb-16">
-          <div>
+          <Reveal direction="up">
             <span className="inline-flex items-center rounded-full bg-red-50 px-4 py-1.5 text-xs uppercase tracking-wide text-[#ff2a2a] mb-6 border border-red-100 shadow-sm">
               {skills.badge}
             </span>
@@ -16,16 +17,21 @@ export function Skills() {
               {skills.headingBefore}
               <span className="text-[#ff2a2a]">{skills.headingAccent}</span>.
             </h2>
-          </div>
-          <p className="text-gray-500 max-w-md text-base md:text-lg leading-relaxed">
-            {skills.description}
-          </p>
+          </Reveal>
+          <Reveal direction="up" delay={120}>
+            <p className="text-gray-500 max-w-md text-base md:text-lg leading-relaxed">
+              {skills.description}
+            </p>
+          </Reveal>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-[minmax(280px,auto)]">
-          {skills.categories.map((cat) => (
-            <article
+          {skills.categories.map((cat, i) => (
+            <Reveal
               key={cat.number}
+              as="article"
+              direction="up"
+              delay={i * 90}
               className={`rounded-[2rem] border p-7 md:p-8 ${cat.bg} ${cat.border} shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_60px_rgb(0,0,0,0.08)] transition-shadow`}
             >
               <div className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white border border-gray-200 text-[#ff2a2a] text-sm mb-5">
@@ -47,7 +53,7 @@ export function Skills() {
                   </span>
                 ))}
               </div>
-            </article>
+            </Reveal>
           ))}
         </div>
       </div>

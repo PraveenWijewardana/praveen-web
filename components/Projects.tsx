@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { projects, projectsSection } from "@/data/portfolio";
+import { Reveal } from "@/components/Reveal";
 
 export function Projects() {
   return (
@@ -8,7 +9,7 @@ export function Projects() {
 
       <div className="relative mx-auto max-w-7xl px-6 md:px-12">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-14 md:mb-20">
-          <div>
+          <Reveal direction="up">
             <span className="inline-flex items-center rounded-full border border-gray-200 bg-white px-4 py-1.5 text-sm text-gray-500 mb-6 shadow-sm">
               {projectsSection.badge}
             </span>
@@ -16,18 +17,22 @@ export function Projects() {
               {projectsSection.headingBefore}
               <span className="text-[#ff2a2a]">{projectsSection.headingAccent}</span>
             </h2>
-          </div>
-          <p className="text-gray-500 max-w-md text-base md:text-lg leading-relaxed">
-            {projectsSection.description}
-          </p>
+          </Reveal>
+          <Reveal direction="up" delay={120}>
+            <p className="text-gray-500 max-w-md text-base md:text-lg leading-relaxed">
+              {projectsSection.description}
+            </p>
+          </Reveal>
         </div>
 
         <div className="space-y-16 md:space-y-32">
           {projects.map((project, index) => {
             const reverse = index % 2 === 1;
             return (
-              <article
+              <Reveal
                 key={project.title}
+                as="article"
+                direction={reverse ? "right" : "left"}
                 className="rounded-[2.5rem] bg-white border border-gray-100 shadow-[0_15px_40px_rgba(0,0,0,0.06)] overflow-hidden"
               >
                 <div
@@ -94,7 +99,7 @@ export function Projects() {
                     </div>
                   </div>
                 </div>
-              </article>
+              </Reveal>
             );
           })}
         </div>

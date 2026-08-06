@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { site, socials, contact, hero } from "@/data/portfolio";
 import { CustomCursor } from "@/components/CustomCursor";
 import { PageLoader } from "@/components/PageLoader";
+import { ScrollProgress } from "@/components/Reveal";
 import "./globals.css";
 
 const siteUrl = site.url;
@@ -103,6 +104,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="min-h-full flex flex-col font-sans">
         <PageLoader />
+        <ScrollProgress />
         <CustomCursor />
         {children}
       </body>

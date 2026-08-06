@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { contactForm } from "@/data/portfolio";
+import { Reveal } from "@/components/Reveal";
 
 export function Contact() {
   const [sent, setSent] = useState(false);
@@ -20,7 +21,10 @@ export function Contact() {
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6 md:px-12">
-        <div className="rounded-[2rem] bg-[#ff2a2a] p-6 sm:p-9 md:p-12 shadow-[0_20px_50px_rgba(255,42,42,0.4)]">
+        <Reveal
+          direction="scale"
+          className="rounded-[2rem] bg-[#ff2a2a] p-6 sm:p-9 md:p-12 shadow-[0_20px_50px_rgba(255,42,42,0.4)]"
+        >
           <p className="text-white/80 text-xs tracking-[0.2em] uppercase mb-8">
             {contactForm.label}
           </p>
@@ -78,7 +82,7 @@ export function Contact() {
               </div>
             </div>
           </form>
-        </div>
+        </Reveal>
       </div>
     </section>
   );
