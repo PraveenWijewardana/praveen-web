@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { hero, socials } from "@/data/portfolio";
 
 function SocialIcon({ label }: { label: string }) {
-  const common = "w-5 h-5";
+  const common = "w-5 h-5 md:w-6 md:h-6";
   switch (label) {
     case "GitHub":
       return (
@@ -42,109 +42,143 @@ export function Hero() {
   const toggleMute = () => {
     const v = videoRef.current;
     if (!v) return;
-    v.muted = !v.muted;
-    setMuted(v.muted);
+    const next = !v.muted;
+    v.muted = next;
+    setMuted(next);
+    if (v.paused) v.play();
   };
 
   return (
     <section
       id="home"
-      className="relative min-h-screen bg-[#ff2a2a] text-white overflow-hidden pb-8"
+      className="relative w-full h-screen overflow-hidden bg-black text-white"
     >
-      <div className="mx-auto max-w-7xl px-6 md:px-12 pt-28 md:pt-32 pb-16 md:pb-24 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-10 items-end">
-          <div className="max-w-xl">
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-black leading-[1.05] tracking-tight">
-              {hero.greeting}
-            </h1>
-            <p className="mt-3 text-3xl sm:text-4xl md:text-5xl font-medium leading-[1.1] text-white/95">
-              {hero.role}
-            </p>
-            <p className="mt-6 text-base md:text-lg leading-relaxed text-white/90 max-w-md">
-              {hero.bio}
-            </p>
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster={hero.portrait}
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
+      >
+        <source src={hero.video} type="video/mp4" />
+      </video>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4">
-              <a
-                href={hero.primaryCta.href}
-                className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm text-black hover:-translate-y-0.5 transition-transform"
-              >
-                {hero.primaryCta.label}
-              </a>
-              <a
-                href={hero.secondaryCta.href}
-                className="inline-flex items-center justify-center rounded-full border border-white/60 px-6 py-3 text-sm text-white hover:bg-white hover:text-black transition-colors"
-              >
-                {hero.secondaryCta.label}
-              </a>
-            </div>
+      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent z-10 pointer-events-none" />
 
-            <div className="mt-8 flex items-center gap-3">
-              <a
-                href={hero.resumeHref}
-                className="w-10 h-10 rounded-full bg-black/20 border border-white/20 flex items-center justify-center text-white/90 hover:bg-white hover:text-black transition-colors"
-                aria-label="Resume"
-                title="Resume"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeWidth="1.8" d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
-                  <path strokeWidth="1.8" d="M14 3v5h5M8 13h8M8 17h6" />
-                </svg>
-              </a>
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-black/20 border border-white/20 flex items-center justify-center text-white/90 hover:bg-white hover:text-black transition-colors"
-                  aria-label={s.label}
-                  title={s.label}
-                >
-                  <SocialIcon label={s.label} />
-                </a>
-              ))}
-            </div>
+      <div className="absolute inset-0 z-20 px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-center md:justify-between items-start text-left w-full h-full pt-28 md:pt-[12%]">
+        <div className="flex flex-col items-start text-left max-w-lg lg:max-w-xl w-full">
+          <h1 className="text-white text-4xl sm:text-5xl md:text-6xl mb-5 tracking-tight leading-[1.05] font-black">
+            {hero.greeting}
+            <br />
+            <span className="font-medium">{hero.role}</span>
+          </h1>
+
+          <p className="text-white/90 text-sm md:text-base leading-relaxed max-w-md mb-8">
+            {hero.bio}
+          </p>
+
+          <div className="flex flex-row items-center gap-3 sm:gap-4 w-full flex-wrap">
+            <a
+              href={hero.primaryCta.href}
+              className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm text-black hover:-translate-y-0.5 transition-transform"
+            >
+              {hero.primaryCta.label}
+            </a>
+            <a
+              href={hero.secondaryCta.href}
+              className="inline-flex items-center justify-center rounded-full border border-white/60 px-6 py-3 text-sm text-white hover:bg-white hover:text-black transition-colors"
+            >
+              {hero.secondaryCta.label}
+            </a>
           </div>
 
-          <div className="relative flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[420px] aspect-[3/4] rounded-[2rem] overflow-hidden shadow-[0_25px_60px_-15px_rgba(0,0,0,0.8)]">
-              <video
-                ref={videoRef}
-                className="absolute inset-0 h-full w-full object-cover"
-                src={hero.video}
-                poster={hero.portrait}
-                autoPlay
-                muted
-                loop
-                playsInline
-              />
-            </div>
-
-            <button
-              type="button"
-              onClick={toggleMute}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-6 flex flex-col items-center gap-2"
+          <div className="mt-8 flex items-center gap-3">
+            <a
+              href={hero.resumeHref}
+              className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-black/20 border border-white/20 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-white hover:text-black transition-colors"
+              aria-label="Resume"
+              title="Resume"
             >
-              <span className="w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-white/20 flex items-center justify-center">
-                {muted ? (
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M16.5 12a4.5 4.5 0 0 0-1.5-3.3v1.76l1.45 1.45c.03-.3.05-.6.05-.91zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.9 8.9 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z" />
-                  </svg>
-                ) : (
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3A4.5 4.5 0 0 0 14 8.7v6.6a4.5 4.5 0 0 0 2.5-3.3zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" />
-                  </svg>
-                )}
-              </span>
-              <span className="text-[9px] tracking-[0.15em] uppercase text-white/80">
-                {muted ? "Unmute Reel" : "Mute Reel"}
-              </span>
-            </button>
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeWidth="1.8" d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+                <path strokeWidth="1.8" d="M14 3v5h5M8 13h8M8 17h6" />
+              </svg>
+            </a>
+            {socials.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-black/20 border border-white/20 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-white hover:text-black transition-colors"
+                aria-label={s.label}
+                title={s.label}
+              >
+                <SocialIcon label={s.label} />
+              </a>
+            ))}
           </div>
         </div>
+
+        <button
+          type="button"
+          onClick={toggleMute}
+          className="group absolute right-6 md:right-0 top-1/2 -translate-y-1/2 md:relative md:top-auto md:translate-y-0 md:self-center flex flex-col items-center"
+        >
+          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/20 bg-black/20 backdrop-blur-md flex justify-center items-center group-hover:scale-105 group-hover:bg-white group-hover:border-white transition-all duration-300 shadow-xl">
+            {muted ? (
+              <svg
+                className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-black transition-colors"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25m-10.5-6L4.5 9H1.5v6h3l4.5 3.75V5.25z"
+                />
+              </svg>
+            ) : (
+              <svg
+                className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-black transition-colors"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28-.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"
+                />
+              </svg>
+            )}
+          </div>
+          <span className="text-white text-[9px] md:text-[11px] tracking-widest uppercase opacity-60 group-hover:opacity-100 transition-opacity mt-1">
+            {muted ? "Unmute Reel" : "Mute Sound"}
+          </span>
+        </button>
       </div>
 
+      <div className="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+        <div className="animate-bounce">
+          <svg
+            className="w-5 h-5 text-white opacity-70"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2.5"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </div>
+      </div>
     </section>
   );
 }
