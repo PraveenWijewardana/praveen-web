@@ -33,7 +33,9 @@ function SocialIcon({ label }: { label: string }) {
 }
 
 const footerNav = nav.filter((n) =>
-  ["Home", "About", "Expertise", "Projects", "Contact"].includes(n.label),
+  ["Home", "About", "Expertise", "Projects", "Experience", "Contact"].includes(
+    n.label,
+  ),
 );
 
 export function Footer() {

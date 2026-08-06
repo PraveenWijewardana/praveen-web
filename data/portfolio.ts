@@ -31,34 +31,34 @@ export const nav = [
   { label: "Expertise", href: "#expertise" },
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
-  { label: "Certifications", href: "#certifications" },
+  { label: "Experience", href: "#experience" },
   { label: "Contact", href: "#contact" },
 ];
 
 export const socials = [
   {
     label: "GitHub",
-    href: "https://github.com/shajith23",
+    href: "https://github.com/PraveenWijewardana",
   },
   {
     label: "LinkedIn",
-    href: "https://www.linkedin.com/in/shajithcp/",
+    href: "https://lk.linkedin.com/in/praveen-wijewardana",
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/_shan.dev",
+    href: "https://www.instagram.com/prave________en",
   },
   {
     label: "WhatsApp",
-    href: "https://wa.me/917603823149",
+    href: "https://wa.me/+94706940521",
   },
 ];
 
 export const contact = {
-  email: "shajith350@gmail.com",
-  phone: "+91 76038 23149",
-  phoneHref: "tel:+917603823149",
-  whatsappHref: "https://wa.me/917603823149",
+  email: "praveenwijewardana1@gmail.com",
+  phone: "+94 70 694 0521",
+  phoneHref: "tel:+94706940521",
+  whatsappHref: "https://wa.me/+94706940521",
   availability: "Worldwide Available",
 };
 
@@ -397,20 +397,25 @@ export const projects = [
   },
 ];
 
-export const certifications = {
-  badge: "Achievements",
-  headingBefore: "Licenses & ",
-  headingAccent: "Certifications",
+export const experience = {
+  badge: "Career Path",
+  headingBefore: "Work ",
+  headingAccent: "Experience",
   description:
-    "Professional qualifications and specialized training that validate my technical expertise.",
+    "Professional roles where I’ve built real products, shipped features, and grown as an engineer.",
   items: [
     {
-      title: "MERN Stack Certified Developer",
-      provider: "BE-Practical Tech Solutions, Bangalore",
+      role: "SE Intern",
+      company: "DaleX Consultancy",
+      period: "Present",
+      location: "Sri Lanka",
       description:
-        "Comprehensive certification covering MongoDB, Express.js, React, and Node.js with hands-on full-stack projects.",
-      link: "/assets/mern-certificate.png",
-      image: "/assets/mern-certificate.png",
+        "Software Engineering Intern contributing to full-stack application development, feature delivery, and day-to-day engineering workflows across modern web technologies.",
+      highlights: [
+        "Building and iterating on production-facing features with the engineering team",
+        "Working across frontend and backend to deliver reliable, user-focused solutions",
+        "Collaborating on code quality, debugging, and continuous improvement",
+      ],
     },
   ],
 };
