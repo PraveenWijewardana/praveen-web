@@ -4,11 +4,25 @@
  */
 
 export const site = {
-  brand: "SHAJITH",
+  fullName: "Praveen Wijewardana",
+  brand: "PRAVEEN",
   year: 2026,
-  metaTitle: "Shajith — Creative Full-Stack Developer",
+  url: "https://praveenwijewardana.com",
+  metaTitle: "Praveen Wijewardana — Creative Full-Stack Developer",
   metaDescription:
-    "Creative Full-Stack Developer crafting immersive, high-performance digital experiences with Next.js, React, TypeScript, and AI-powered workflows.",
+    "Praveen Wijewardana is a Creative Full-Stack Developer crafting immersive, high-performance digital experiences with Next.js, React, TypeScript, and AI-powered workflows.",
+  keywords: [
+    "Praveen Wijewardana",
+    "Full-Stack Developer",
+    "Creative Developer",
+    "Next.js",
+    "React",
+    "TypeScript",
+    "Web Developer",
+    "Portfolio",
+    "Frontend Engineer",
+    "AI-powered development",
+  ],
 };
 
 export const nav = [
@@ -49,7 +63,7 @@ export const contact = {
 };
 
 export const hero = {
-  greeting: "Hi, I'm Shajith",
+  greeting: "Hi, I'm Praveen",
   role: "Creative Full-Stack Developer",
   bio: "I craft immersive, high-performance digital experiences using Next.js, React, TypeScript, Node.js, GSAP, Three.js, Tailwind CSS, and AI-powered workflows—combining cinematic design, seamless interactions, and scalable engineering.",
   primaryCta: { label: "View My Work", href: "#projects" },
@@ -63,8 +77,8 @@ export const hero = {
 export const about = {
   heading: "Hello!",
   body:
-    "I'm SHAJITH, a Creative Full-Stack Developer passionate about crafting immersive, high-performance digital experiences. I specialize in building modern web applications with Next.js, React, TypeScript, Node.js, Three.js, GSAP, Tailwind CSS, and AI-powered workflows, blending creativity with scalable engineering.",
-  highlightName: "SHAJITH",
+    "I'm PRAVEEN WIJEWARDANA, a Creative Full-Stack Developer passionate about crafting immersive, high-performance digital experiences. I specialize in building modern web applications with Next.js, React, TypeScript, Node.js, Three.js, GSAP, Tailwind CSS, and AI-powered workflows, blending creativity with scalable engineering.",
+  highlightName: "PRAVEEN WIJEWARDANA",
   techIcons: [
     { name: "React", src: "/assets/react.png" },
     { name: "Node.js", src: "/assets/node.png" },
