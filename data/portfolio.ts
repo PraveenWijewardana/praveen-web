@@ -372,29 +372,7 @@ export const projects = [
       "HTML5 Canvas",
       "Vercel",
     ],
-  },
-  {
-    title: "Apple Vision Pro",
-    subtitle: "Interactive Storytelling Landing Page",
-    description:
-      "A cinematic recreation of Apple's Vision Pro website featuring smooth scrolling, immersive storytelling, premium animations, and modern frontend engineering.",
-    image: "/assets/project-6.png",
-    link: "https://apple-vision-pro-psi.vercel.app/",
-    features: [
-      "Cinematic recreation of Apple's Vision Pro web experience",
-      "Smooth scrolling & scroll-triggered motion animations",
-      "Immersive spatial UI aesthetic & interactive storytelling",
-      "High-performance frontend architecture",
-    ],
-    techStack: [
-      "Next.js",
-      "React",
-      "GSAP",
-      "Tailwind CSS",
-      "Lenis",
-      "Framer Motion",
-    ],
-  },
+  }
 ];
 
 export const experience = {
