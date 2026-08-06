@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { site, socials, contact, hero } from "@/data/portfolio";
+import { CustomCursor } from "@/components/CustomCursor";
+import { PageLoader } from "@/components/PageLoader";
 import "./globals.css";
 
 const siteUrl = site.url;
@@ -99,7 +101,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <PageLoader />
+        <CustomCursor />
+        {children}
+      </body>
     </html>
   );
 }
