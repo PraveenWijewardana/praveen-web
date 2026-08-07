@@ -64,9 +64,11 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [{ url: "/assets/fav1.png", type: "image/png" }],
-    apple: [{ url: "/assets/fav1.png" }],
-    shortcut: "/assets/fav1.png",
+    icon: [
+      { url: "/assets/brand-mark.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png", sizes: "64x64" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
   },
   formatDetection: {
     email: false,

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { nav, site, hero } from "@/data/portfolio";
+import { BrandMark } from "@/components/BrandMark";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
@@ -42,10 +43,13 @@ export function Navbar() {
         <div className="flex items-center">
           <a
             href="#home"
-            className={`text-2xl tracking-tight transition-colors duration-500 ${logoClass}`}
+            className={`flex items-center gap-2.5 text-2xl tracking-tight transition-colors duration-500 ${logoClass}`}
           >
-            {site.brand}{" "}
-            <span className="text-[#ff2a2a]">.</span>
+            <BrandMark className="h-8 w-8 md:h-9 md:w-9 rounded-lg shadow-sm ring-1 ring-white/10" />
+            <span>
+              {site.brand}
+              <span className="text-[#ff2a2a]">.</span>
+            </span>
           </a>
         </div>
 
