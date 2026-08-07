@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { contactForm } from "@/data/portfolio";
+import { contact, contactForm } from "@/data/portfolio";
 import { Reveal } from "@/components/Reveal";
 
 type Status = "idle" | "loading" | "success" | "error";
@@ -37,11 +37,11 @@ export function Contact() {
         return;
       }
 
-      let res: Response;
+      let ok = false;
+      let err = "";
 
       if (WEB3FORMS_KEY) {
-        // Free Web3Forms plan requires client-side submit
-        res = await fetch("https://api.web3forms.com/submit", {
+        const res = await fetch("https://api.web3forms.com/submit", {
           method: "POST",
           headers: { "Content-Type": "application/json", Accept: "application/json" },
           body: JSON.stringify({
@@ -55,38 +55,50 @@ export function Contact() {
             botcheck: false,
           }),
         });
+        const json = (await res.json()) as {
+          success?: boolean | string;
+          message?: string;
+        };
+        ok = json.success === true || json.success === "true";
+        err = json.message || "Failed to send. Please try again.";
       } else {
-        res = await fetch("/api/contact", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({
-            firstName,
-            lastName,
-            email,
-            mobile,
-            message,
-            website,
-          }),
-        });
+        // FormSubmit must be called from the browser (not a Vercel API route)
+        const res = await fetch(
+          `https://formsubmit.co/ajax/${encodeURIComponent(contact.email)}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({
+              name: `${firstName} ${lastName}`,
+              email,
+              phone: mobile || "Not provided",
+              message,
+              _subject: `New message from ${firstName} ${lastName} — Portfolio`,
+              _template: "table",
+              _captcha: "false",
+              _replyto: email,
+            }),
+          },
+        );
+
+        const json = (await res.json()) as {
+          success?: boolean | string;
+          message?: string;
+        };
+
+        ok = json.success === true || json.success === "true";
+        const messageText = json.message || "Failed to send. Please try again.";
+        err = /activat/i.test(messageText)
+          ? "Almost there — open your Gmail (praveenwijewardana1@gmail.com), find the FormSubmit email, click Activate Form, then submit again."
+          : messageText;
       }
 
-      const json = (await res.json()) as {
-        ok?: boolean;
-        success?: boolean | string;
-        error?: string;
-        message?: string;
-      };
-
-      const ok =
-        json.ok === true || json.success === true || json.success === "true";
-
-      if (!res.ok || !ok) {
+      if (!ok) {
         setStatus("error");
-        setError(
-          json.error ||
-            json.message ||
-            "Failed to send. Please try again.",
-        );
+        setError(err);
         return;
       }
 
