@@ -101,7 +101,7 @@ export function Footer() {
               Contact
             </p>
             <p className="font-mono text-xs text-gray-400">
-              © {site.year} {site.brand}. All rights reserved.
+              © {site.year} {site.fullName}. Software Engineer portfolio.
             </p>
           </div>
 

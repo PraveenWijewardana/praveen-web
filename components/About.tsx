@@ -23,10 +23,11 @@ export function About() {
               <div className="relative w-[260px] sm:w-[300px] aspect-[3/4] rounded-[1.5rem] overflow-hidden bg-[#111] border-[6px] border-[#1a1a1a] shadow-[0_20px_50px_rgba(0,0,0,0.4)] rotate-2 md:rotate-3 hover:rotate-0 transition-transform duration-500">
                 <Image
                   src={hero.portrait}
-                  alt="About profile"
+                  alt="Praveen Wijewardana — Software Engineer (SE) and Full-Stack Developer portrait"
                   fill
                   sizes="(max-width: 640px) 260px, 300px"
                   className="object-cover"
+                  priority
                 />
               </div>
             </div>

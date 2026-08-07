@@ -105,6 +105,7 @@ export function Hero() {
         playsInline
         preload="auto"
         poster={playing ? undefined : hero.portrait}
+        aria-label="Praveen Wijewardana — Software Engineer intro reel"
         className="absolute top-0 left-0 w-full h-full object-cover object-[78%_center] md:object-center z-0"
       />
 
@@ -113,7 +114,8 @@ export function Hero() {
       <div className="absolute inset-0 z-20 px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-center md:justify-between items-start text-left w-full h-full pt-28 md:pt-[12%]">
         <div className="flex flex-col items-start text-left max-w-lg lg:max-w-xl w-full">
           <h1 className="text-white text-4xl sm:text-5xl md:text-6xl mb-5 tracking-tight leading-[1.05] font-black">
-            {hero.greeting}
+            Hi, I&apos;m Praveen{" "}
+            <span className="sr-only">Wijewardana</span>
             <br />
             <span className="font-medium">{hero.role}</span>
           </h1>

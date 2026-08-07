@@ -43,6 +43,7 @@ export function Navbar() {
         <div className="flex items-center">
           <a
             href="#home"
+            aria-label="Praveen Wijewardana — home"
             className={`flex items-center gap-2.5 text-2xl tracking-tight transition-colors duration-500 ${logoClass}`}
           >
             <BrandMark className="h-8 w-8 md:h-9 md:w-9 rounded-lg shadow-sm ring-1 ring-white/10" />

@@ -5,23 +5,45 @@
 
 export const site = {
   fullName: "Praveen Wijewardana",
+  givenName: "Praveen",
+  familyName: "Wijewardana",
   brand: "PRAVEEN",
   year: 2026,
   url: "https://praveenwijewardana.com",
-  metaTitle: "Praveen Wijewardana — Creative Full-Stack Developer",
+  metaTitle:
+    "Praveen Wijewardana | Software Engineer (SE) & Full-Stack Developer",
   metaDescription:
-    "Praveen Wijewardana is a Creative Full-Stack Developer crafting immersive, high-performance digital experiences with Next.js, React, TypeScript, and AI-powered workflows.",
+    "Praveen Wijewardana (Praveen / Wijewardana / praveenwijewardana) is a Software Engineer (SE) and Creative Full-Stack Developer building high-performance web apps with Next.js, React, TypeScript, and AI-powered workflows.",
+  alternateNames: [
+    "Praveen",
+    "Wijewardana",
+    "PraveenWijewardana",
+    "praveen wijewardana",
+    "praveenwijewardana",
+  ],
   keywords: [
+    "Praveen",
     "Praveen Wijewardana",
+    "praveen wijewardana",
+    "PraveenWijewardana",
+    "praveenwijewardana",
+    "Wijewardana",
+    "Software Engineer",
+    "Software Engineer SE",
+    "SE",
+    "SE Intern",
     "Full-Stack Developer",
+    "Full Stack Software Engineer",
     "Creative Developer",
+    "Web Developer",
+    "Frontend Engineer",
+    "Backend Developer",
     "Next.js",
     "React",
     "TypeScript",
-    "Web Developer",
-    "Portfolio",
-    "Frontend Engineer",
-    "AI-powered development",
+    "Node.js",
+    "Sri Lanka Software Engineer",
+    "Praveen Wijewardana portfolio",
   ],
 };
 
@@ -64,20 +86,21 @@ export const contact = {
 
 export const hero = {
   greeting: "Hi, I'm Praveen",
-  role: "Creative Full-Stack Developer",
-  bio: "I craft immersive, high-performance digital experiences using Next.js, React, TypeScript, Node.js, GSAP, Three.js, Tailwind CSS, and AI-powered workflows—combining cinematic design, seamless interactions, and scalable engineering.",
+  role: "Software Engineer & Full-Stack Developer",
+  bio: "I'm Praveen Wijewardana — a Software Engineer (SE) crafting immersive, high-performance digital experiences with Next.js, React, TypeScript, Node.js, GSAP, Three.js, Tailwind CSS, and AI-powered workflows.",
   primaryCta: { label: "View My Work", href: "#projects" },
   secondaryCta: { label: "Contact Me", href: "#contact" },
   resumeHref: "#",
   hireHref: "#contact",
   video: "/assets/hero-video.mp4",
   portrait: "/assets/portrait.png",
+  ogImage: "/assets/og.jpg",
 };
 
 export const about = {
   heading: "Hello!",
   body:
-    "I'm PRAVEEN WIJEWARDANA, a Creative Full-Stack Developer passionate about crafting immersive, high-performance digital experiences. I specialize in building modern web applications with Next.js, React, TypeScript, Node.js, Three.js, GSAP, Tailwind CSS, and AI-powered workflows, blending creativity with scalable engineering.",
+    "I'm PRAVEEN WIJEWARDANA, a Software Engineer (SE) and Creative Full-Stack Developer passionate about crafting immersive, high-performance digital experiences. I specialize in building modern web applications with Next.js, React, TypeScript, Node.js, Three.js, GSAP, Tailwind CSS, and AI-powered workflows, blending creativity with scalable engineering.",
   highlightName: "PRAVEEN WIJEWARDANA",
   techIcons: [
     { name: "React", src: "/assets/react.png" },
@@ -383,12 +406,12 @@ export const experience = {
     "Professional roles where I’ve built real products, shipped features, and grown as an engineer.",
   items: [
     {
-      role: "SE Intern",
+      role: "Software Engineer Intern (SE)",
       company: "DaleX Consultancy",
       period: "Present",
       location: "Sri Lanka",
       description:
-        "Software Engineering Intern contributing to full-stack application development, feature delivery, and day-to-day engineering workflows across modern web technologies.",
+        "Software Engineer (SE) Intern contributing to full-stack application development, feature delivery, and day-to-day engineering workflows across modern web technologies.",
       highlights: [
         "Building and iterating on production-facing features with the engineering team",
         "Working across frontend and backend to deliver reliable, user-focused solutions",
