@@ -25,6 +25,7 @@ export function About() {
                   src={hero.portrait}
                   alt="About profile"
                   fill
+                  sizes="(max-width: 640px) 260px, 300px"
                   className="object-cover"
                 />
               </div>
