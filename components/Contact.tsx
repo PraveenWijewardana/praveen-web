@@ -4,12 +4,50 @@ import { FormEvent, useState } from "react";
 import { contactForm } from "@/data/portfolio";
 import { Reveal } from "@/components/Reveal";
 
-export function Contact() {
-  const [sent, setSent] = useState(false);
+type Status = "idle" | "loading" | "success" | "error";
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+export function Contact() {
+  const [status, setStatus] = useState<Status>("idle");
+  const [error, setError] = useState("");
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSent(true);
+    if (status === "loading") return;
+
+    const form = e.currentTarget;
+    const data = new FormData(form);
+
+    setStatus("loading");
+    setError("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          firstName: data.get("firstName"),
+          lastName: data.get("lastName"),
+          email: data.get("email"),
+          mobile: data.get("mobile"),
+          message: data.get("message"),
+          website: data.get("website"),
+        }),
+      });
+
+      const json = (await res.json()) as { ok?: boolean; error?: string };
+
+      if (!res.ok || !json.ok) {
+        setStatus("error");
+        setError(json.error || "Failed to send. Please try again.");
+        return;
+      }
+
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+      setError("Network error. Please check your connection and try again.");
+    }
   };
 
   return (
@@ -30,6 +68,16 @@ export function Contact() {
           </p>
 
           <form onSubmit={onSubmit} className="grid md:grid-cols-2 gap-8 md:gap-12">
+            {/* Honeypot — leave empty */}
+            <input
+              type="text"
+              name="website"
+              tabIndex={-1}
+              autoComplete="off"
+              className="hidden"
+              aria-hidden="true"
+            />
+
             <div className="space-y-6">
               {(
                 [
@@ -44,8 +92,9 @@ export function Contact() {
                   <input
                     name={name}
                     required={name !== "mobile"}
-                    type={name === "email" ? "email" : "text"}
-                    className="mt-2 w-full bg-transparent border-0 border-b border-white/40 pb-2.5 text-white placeholder-white/50 focus:border-white focus:outline-none"
+                    type={name === "email" ? "email" : name === "mobile" ? "tel" : "text"}
+                    disabled={status === "loading"}
+                    className="mt-2 w-full bg-transparent border-0 border-b border-white/40 pb-2.5 text-white placeholder-white/50 focus:border-white focus:outline-none disabled:opacity-60"
                   />
                 </label>
               ))}
@@ -57,26 +106,47 @@ export function Contact() {
                 <textarea
                   name="message"
                   required
+                  disabled={status === "loading"}
                   placeholder={contactForm.fields.message}
-                  className="flex-1 min-h-[180px] md:min-h-[220px] w-full resize-none bg-transparent border-0 border-b border-white/40 pb-2.5 text-white placeholder-white focus:border-white focus:outline-none"
+                  className="flex-1 min-h-[180px] md:min-h-[220px] w-full resize-none bg-transparent border-0 border-b border-white/40 pb-2.5 text-white placeholder-white focus:border-white focus:outline-none disabled:opacity-60"
                 />
               </label>
 
               <label className="mt-6 flex items-start gap-3 text-sm text-white/90">
                 <input
                   type="checkbox"
+                  name="consent"
                   required
+                  disabled={status === "loading"}
                   className="mt-1 rounded border-white/40"
                 />
                 <span>{contactForm.consent}</span>
               </label>
 
+              {(status === "success" || status === "error") && (
+                <p
+                  className={`mt-4 text-sm ${
+                    status === "success" ? "text-white" : "text-black/80"
+                  }`}
+                  role="status"
+                >
+                  {status === "success"
+                    ? "Thanks — your message was sent. I’ll get back to you soon."
+                    : error}
+                </p>
+              )}
+
               <div className="mt-8 flex justify-end">
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 rounded-full border border-white px-8 py-3 text-white hover:bg-white hover:text-[#ff2a2a] transition-colors"
+                  disabled={status === "loading"}
+                  className="inline-flex items-center gap-2 rounded-full border border-white px-8 py-3 text-white hover:bg-white hover:text-[#ff2a2a] transition-colors disabled:opacity-60 disabled:pointer-events-none"
                 >
-                  {sent ? "Sent ✓" : contactForm.submit}
+                  {status === "loading"
+                    ? "Sending…"
+                    : status === "success"
+                      ? "Sent ✓"
+                      : contactForm.submit}
                   <span>→</span>
                 </button>
               </div>
