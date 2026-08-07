@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { hero, socials } from "@/data/portfolio";
 
 function SocialIcon({ label }: { label: string }) {
@@ -38,6 +38,47 @@ function SocialIcon({ label }: { label: string }) {
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+
+    const tryPlay = () => {
+      const p = video.play();
+      if (p) {
+        p.then(() => setPlaying(true)).catch(() => {
+          // Autoplay may be blocked until the loader finishes — retry shortly.
+        });
+      }
+    };
+
+    const onPlaying = () => setPlaying(true);
+
+    video.addEventListener("loadeddata", tryPlay);
+    video.addEventListener("canplay", tryPlay);
+    video.addEventListener("playing", onPlaying);
+
+    // Kick after intro loader removes scroll lock
+    const boot = window.setTimeout(tryPlay, 100);
+    const retry = window.setTimeout(tryPlay, 800);
+    const retryLate = window.setTimeout(tryPlay, 2800);
+
+    if (video.readyState >= 2) tryPlay();
+
+    return () => {
+      window.clearTimeout(boot);
+      window.clearTimeout(retry);
+      window.clearTimeout(retryLate);
+      video.removeEventListener("loadeddata", tryPlay);
+      video.removeEventListener("canplay", tryPlay);
+      video.removeEventListener("playing", onPlaying);
+    };
+  }, []);
 
   const toggleMute = () => {
     const v = videoRef.current;
@@ -45,7 +86,9 @@ export function Hero() {
     const next = !v.muted;
     v.muted = next;
     setMuted(next);
-    if (v.paused) v.play();
+    if (v.paused) {
+      v.play().then(() => setPlaying(true)).catch(() => {});
+    }
   };
 
   return (
@@ -55,15 +98,15 @@ export function Hero() {
     >
       <video
         ref={videoRef}
+        src={hero.video}
         autoPlay
         loop
         muted
         playsInline
-        poster={hero.portrait}
+        preload="auto"
+        poster={playing ? undefined : hero.portrait}
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
-      >
-        <source src={hero.video} type="video/mp4" />
-      </video>
+      />
 
       <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent z-10 pointer-events-none" />
 
