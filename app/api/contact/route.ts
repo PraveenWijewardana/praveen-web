@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { contact } from "@/data/portfolio";
+import { contact, site } from "@/data/portfolio";
 
 type ContactBody = {
   firstName?: string;
@@ -12,6 +12,119 @@ type ContactBody = {
 
 function isEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function siteOrigin(request: Request) {
+  const fromRequest = request.headers.get("origin");
+  if (fromRequest) return fromRequest;
+
+  const fromEnv = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  if (fromEnv) return fromEnv;
+
+  return site.url;
+}
+
+async function sendWithResend(input: {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  subject: string;
+}) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return null;
+
+  const from =
+    process.env.RESEND_FROM_EMAIL || "Portfolio Contact <onboarding@resend.dev>";
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      from,
+      to: [contact.email],
+      reply_to: input.email,
+      subject: input.subject,
+      text: [
+        `Name: ${input.name}`,
+        `Email: ${input.email}`,
+        `Phone: ${input.phone}`,
+        "",
+        input.message,
+      ].join("\n"),
+    }),
+  });
+
+  const data = (await res.json()) as { id?: string; message?: string };
+
+  if (!res.ok) {
+    return {
+      ok: false as const,
+      error: data.message || "Failed to send message via Resend.",
+    };
+  }
+
+  return { ok: true as const };
+}
+
+async function sendWithFormSubmit(
+  request: Request,
+  input: {
+    name: string;
+    email: string;
+    phone: string;
+    message: string;
+    subject: string;
+  },
+) {
+  const origin = siteOrigin(request);
+
+  const res = await fetch(
+    `https://formsubmit.co/ajax/${encodeURIComponent(contact.email)}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Origin: origin,
+        Referer: `${origin}/`,
+      },
+      body: JSON.stringify({
+        name: input.name,
+        email: input.email,
+        phone: input.phone,
+        message: input.message,
+        _subject: input.subject,
+        _template: "table",
+        _captcha: "false",
+        _replyto: input.email,
+      }),
+    },
+  );
+
+  const data = (await res.json()) as {
+    success?: string | boolean;
+    message?: string;
+  };
+
+  const success = data.success === true || data.success === "true";
+
+  if (!success) {
+    const message = data.message || "Failed to send message.";
+    const needsActivation = /activat/i.test(message);
+
+    return {
+      ok: false as const,
+      error: needsActivation
+        ? "Almost there — check your inbox for a FormSubmit activation email and click Activate Form, then try again."
+        : message,
+    };
+  }
+
+  return { ok: true as const };
 }
 
 export async function POST(request: Request) {
@@ -60,73 +173,15 @@ export async function POST(request: Request) {
     email,
     phone: mobile || "Not provided",
     message,
-    _subject: `New message from ${firstName} ${lastName} — Portfolio`,
-    _template: "table",
-    _captcha: "false",
+    subject: `New message from ${firstName} ${lastName} — Portfolio`,
   };
 
-  const accessKey = process.env.WEB3FORMS_ACCESS_KEY;
-
   try {
-    if (accessKey) {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          access_key: accessKey,
-          subject: payload._subject,
-          from_name: "Praveen Portfolio",
-          name: payload.name,
-          email: payload.email,
-          phone: payload.phone,
-          message: payload.message,
-        }),
-      });
+    const viaResend = await sendWithResend(payload);
+    const result = viaResend ?? (await sendWithFormSubmit(request, payload));
 
-      const data = (await res.json()) as { success?: boolean; message?: string };
-      if (!res.ok || !data.success) {
-        return NextResponse.json(
-          { ok: false, error: data.message || "Failed to send message." },
-          { status: 502 },
-        );
-      }
-    } else {
-      const res = await fetch(
-        `https://formsubmit.co/ajax/${encodeURIComponent(contact.email)}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          body: JSON.stringify(payload),
-        },
-      );
-
-      const data = (await res.json()) as {
-        success?: string | boolean;
-        message?: string;
-      };
-
-      const success =
-        data.success === true ||
-        data.success === "true" ||
-        res.ok;
-
-      if (!success) {
-        return NextResponse.json(
-          {
-            ok: false,
-            error:
-              data.message ||
-              "Failed to send message. If this is the first time, check your inbox to activate the form.",
-          },
-          { status: 502 },
-        );
-      }
+    if (!result.ok) {
+      return NextResponse.json({ ok: false, error: result.error }, { status: 502 });
     }
 
     return NextResponse.json({ ok: true });

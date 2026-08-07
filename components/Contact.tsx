@@ -6,6 +6,8 @@ import { Reveal } from "@/components/Reveal";
 
 type Status = "idle" | "loading" | "success" | "error";
 
+const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
@@ -17,28 +19,74 @@ export function Contact() {
     const form = e.currentTarget;
     const data = new FormData(form);
 
+    const firstName = String(data.get("firstName") ?? "").trim();
+    const lastName = String(data.get("lastName") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
+    const mobile = String(data.get("mobile") ?? "").trim();
+    const message = String(data.get("message") ?? "").trim();
+    const website = String(data.get("website") ?? "").trim();
+
     setStatus("loading");
     setError("");
 
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({
-          firstName: data.get("firstName"),
-          lastName: data.get("lastName"),
-          email: data.get("email"),
-          mobile: data.get("mobile"),
-          message: data.get("message"),
-          website: data.get("website"),
-        }),
-      });
+      // Honeypot — pretend success for bots
+      if (website) {
+        setStatus("success");
+        form.reset();
+        return;
+      }
 
-      const json = (await res.json()) as { ok?: boolean; error?: string };
+      let res: Response;
 
-      if (!res.ok || !json.ok) {
+      if (WEB3FORMS_KEY) {
+        // Free Web3Forms plan requires client-side submit
+        res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_KEY,
+            subject: `New message from ${firstName} ${lastName} — Portfolio`,
+            from_name: "Praveen Portfolio",
+            name: `${firstName} ${lastName}`,
+            email,
+            phone: mobile || "Not provided",
+            message,
+            botcheck: false,
+          }),
+        });
+      } else {
+        res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            mobile,
+            message,
+            website,
+          }),
+        });
+      }
+
+      const json = (await res.json()) as {
+        ok?: boolean;
+        success?: boolean | string;
+        error?: string;
+        message?: string;
+      };
+
+      const ok =
+        json.ok === true || json.success === true || json.success === "true";
+
+      if (!res.ok || !ok) {
         setStatus("error");
-        setError(json.error || "Failed to send. Please try again.");
+        setError(
+          json.error ||
+            json.message ||
+            "Failed to send. Please try again.",
+        );
         return;
       }
 
@@ -125,8 +173,8 @@ export function Contact() {
 
               {(status === "success" || status === "error") && (
                 <p
-                  className={`mt-4 text-sm ${
-                    status === "success" ? "text-white" : "text-black/80"
+                  className={`mt-4 text-sm leading-relaxed ${
+                    status === "success" ? "text-white" : "text-black/85"
                   }`}
                   role="status"
                 >
