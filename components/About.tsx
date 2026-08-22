@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { about, hero } from "@/data/portfolio";
 import { Reveal } from "@/components/Reveal";
+import { AboutTechCarousel } from "@/components/AboutTechCarousel";
 
 export function About() {
   const parts = about.body.split(about.highlightName);
@@ -43,18 +44,7 @@ export function About() {
               {parts[1]}
             </p>
 
-            <div className="mt-10 flex items-center gap-8 flex-wrap">
-              {about.techIcons.map((icon) => (
-                <Image
-                  key={icon.name}
-                  src={icon.src}
-                  alt={icon.name}
-                  width={72}
-                  height={72}
-                  className="h-14 w-auto object-contain opacity-95"
-                />
-              ))}
-            </div>
+            <AboutTechCarousel />
           </Reveal>
         </div>
       </div>
@@ -62,7 +52,7 @@ export function About() {
       <div className="hero-wave">
         <svg viewBox="0 0 1440 140" preserveAspectRatio="none" className="w-full h-20 md:h-28">
           <path
-            fill="#f9fafb"
+            fill="#ffffff"
             d="M0,80 C320,140 560,20 800,60 C1040,100 1280,130 1440,70 L1440,140 L0,140 Z"
           />
         </svg>

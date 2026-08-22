@@ -70,6 +70,110 @@ body {
   );
 }
 
+/* About — smooth scrolling languages & tools marquee */
+.about-tech-marquee {
+  position: relative;
+  width: 100%;
+  max-width: 36rem;
+  overflow: hidden;
+  padding: 1.25rem 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 8%,
+    #000 92%,
+    transparent
+  );
+}
+
+.about-tech-marquee::before {
+  content: "";
+  position: absolute;
+  left: 10%;
+  right: 10%;
+  top: 50%;
+  height: 3.5rem;
+  transform: translateY(-50%);
+  border-radius: 9999px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0.12) 45%,
+    transparent 75%
+  );
+  filter: blur(12px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.about-tech-marquee__track {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: max-content;
+  gap: 1.5rem;
+  align-items: center;
+  animation: about-tech-marquee-scroll 22s linear infinite;
+  will-change: transform;
+}
+
+.about-tech-marquee:hover .about-tech-marquee__track {
+  animation-play-state: paused;
+}
+
+.about-tech-marquee__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-tech-marquee__img {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.about-tech-marquee__item:hover {
+  transform: translateY(-6px) scale(1.12);
+}
+
+.about-tech-marquee__item:hover .about-tech-marquee__img {
+  transform: scale(1.02);
+}
+
+@keyframes about-tech-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-tech-marquee__track {
+    animation: none;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 1.25rem 1.5rem;
+  }
+
+  .about-tech-marquee {
+    mask-image: none;
+    overflow: visible;
+  }
+
+  .about-tech-marquee__item[aria-hidden="true"] {
+    display: none;
+  }
+
+  .about-tech-marquee__item,
+  .about-tech-marquee__img {
+    transition: none;
+  }
+}
+
 /* Custom cursor — desktop / fine pointer only */
 @media (hover: hover) and (pointer: fine) {
   .has-custom-cursor,

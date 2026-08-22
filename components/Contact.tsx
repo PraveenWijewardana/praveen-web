@@ -1,12 +1,10 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { contact, contactForm } from "@/data/portfolio";
+import { contactForm } from "@/data/portfolio";
 import { Reveal } from "@/components/Reveal";
 
 type Status = "idle" | "loading" | "success" | "error";
-
-const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
@@ -30,75 +28,30 @@ export function Contact() {
     setError("");
 
     try {
-      // Honeypot — pretend success for bots
       if (website) {
         setStatus("success");
         form.reset();
         return;
       }
 
-      let ok = false;
-      let err = "";
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          mobile,
+          message,
+          website: "",
+        }),
+      });
 
-      if (WEB3FORMS_KEY) {
-        const res = await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({
-            access_key: WEB3FORMS_KEY,
-            subject: `New message from ${firstName} ${lastName} — Portfolio`,
-            from_name: "Praveen Portfolio",
-            name: `${firstName} ${lastName}`,
-            email,
-            phone: mobile || "Not provided",
-            message,
-            botcheck: false,
-          }),
-        });
-        const json = (await res.json()) as {
-          success?: boolean | string;
-          message?: string;
-        };
-        ok = json.success === true || json.success === "true";
-        err = json.message || "Failed to send. Please try again.";
-      } else {
-        // FormSubmit must be called from the browser (not a Vercel API route)
-        const res = await fetch(
-          `https://formsubmit.co/ajax/${encodeURIComponent(contact.email)}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({
-              name: `${firstName} ${lastName}`,
-              email,
-              phone: mobile || "Not provided",
-              message,
-              _subject: `New message from ${firstName} ${lastName} — Portfolio`,
-              _template: "table",
-              _captcha: "false",
-              _replyto: email,
-            }),
-          },
-        );
+      const json = (await res.json()) as { ok?: boolean; error?: string };
 
-        const json = (await res.json()) as {
-          success?: boolean | string;
-          message?: string;
-        };
-
-        ok = json.success === true || json.success === "true";
-        const messageText = json.message || "Failed to send. Please try again.";
-        err = /activat/i.test(messageText)
-          ? "Almost there — open your Gmail (praveenwijewardana1@gmail.com), find the FormSubmit email, click Activate Form, then submit again."
-          : messageText;
-      }
-
-      if (!ok) {
+      if (!res.ok || !json.ok) {
         setStatus("error");
-        setError(err);
+        setError(json.error || "Failed to send. Please try again.");
         return;
       }
 
@@ -128,7 +81,6 @@ export function Contact() {
           </p>
 
           <form onSubmit={onSubmit} className="grid md:grid-cols-2 gap-8 md:gap-12">
-            {/* Honeypot — leave empty */}
             <input
               type="text"
               name="website"
