@@ -93,8 +93,8 @@ export const hero = {
   resumeHref: "#",
   hireHref: "#contact",
   video: "/assets/hero-video.mp4",
-  portrait: "/assets/portrait.png",
-  ogImage: "/assets/og.jpg",
+  portrait: "/assets/praveenwijewardana.jpg",
+  ogImage: "/assets/praveenwijewardana.jpg",
 };
 
 export const about = {

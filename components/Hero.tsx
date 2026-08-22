@@ -106,7 +106,7 @@ export function Hero() {
         preload="auto"
         poster={playing ? undefined : hero.portrait}
         aria-label="Praveen Wijewardana — Software Engineer intro reel"
-        className="absolute top-0 left-0 w-full h-full object-cover object-[78%_center] md:object-center z-0"
+        className="absolute top-0 left-0 w-full h-full object-cover object-center z-0"
       />
 
       <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent z-10 pointer-events-none" />

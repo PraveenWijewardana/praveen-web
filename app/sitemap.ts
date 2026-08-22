@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
       images: [
-        `${site.url}/assets/og.jpg`,
+        `${site.url}${hero.ogImage}`,
         `${site.url}/opengraph-image.png`,
         `${site.url}${hero.portrait}`,
       ],

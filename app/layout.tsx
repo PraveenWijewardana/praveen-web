@@ -6,7 +6,7 @@ import { ScrollProgress } from "@/components/Reveal";
 import "./globals.css";
 
 const siteUrl = site.url;
-const ogImageUrl = `${siteUrl}/assets/og.jpg`;
+const ogImageUrl = `${siteUrl}${hero.ogImage}`;
 const portraitUrl = `${siteUrl}${hero.portrait}`;
 const title = site.metaTitle;
 const description = site.metaDescription;
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     username: "praveenwijewardana",
     images: [
       {
-        url: "/assets/og.jpg",
+        url: hero.ogImage,
         width: 1200,
         height: 630,
         alt: `${site.fullName} — Software Engineer (SE) & Full-Stack Developer`,
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     title,
     description,
     creator: "@praveenwijewardana",
-    images: ["/assets/og.jpg"],
+    images: [hero.ogImage],
   },
   robots: {
     index: true,
