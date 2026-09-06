@@ -34,7 +34,7 @@ export function About() {
             </div>
           </Reveal>
 
-          <Reveal direction="right" delay={120}>
+          <Reveal direction="right" delay={120} className="min-w-0 w-full">
             <h2 className="text-5xl md:text-6xl font-black text-black tracking-tight">
               {about.heading}
             </h2>

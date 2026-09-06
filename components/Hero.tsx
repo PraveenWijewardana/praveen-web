@@ -135,9 +135,9 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative w-full min-h-screen min-h-[100svh] overflow-hidden bg-[#0a0a0a] text-white flex flex-col justify-center"
+      className="relative isolate w-full min-h-screen min-h-[100svh] overflow-hidden bg-[#0a0a0a] text-white flex flex-col justify-center"
     >
-      {/* Background video: responsive focal position keeps subject framed on phones, tablets, and widescreen */}
+      {/* Background video: visible on mobile and desktop without the dark overlay that was masking the subject */}
       <video
         ref={videoRef}
         src={hero.video}
@@ -147,15 +147,12 @@ export function Hero() {
         playsInline
         preload="auto"
         aria-label="Praveen Wijewardana — Software Engineer intro reel"
-        className="absolute top-0 left-0 w-full h-full object-cover object-[78%_center] sm:object-[75%_center] lg:object-center z-0 pointer-events-none"
+        className="absolute inset-0 z-0 h-full w-full scale-110 object-cover object-[75%_28%] sm:object-[70%_24%] md:object-center lg:object-center pointer-events-none"
       />
 
-      {/* Directional gradients: vertical dark vignette on mobile/tablets, horizontal fade on desktop */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-black/90 lg:bg-gradient-to-r lg:from-black/90 lg:via-black/45 lg:to-transparent z-10 pointer-events-none" />
-
       {/* Main hero content */}
-      <div className="relative z-20 px-6 sm:px-8 md:px-12 max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center text-left w-full pt-24 pb-24 sm:pt-28 sm:pb-28 lg:py-32 my-auto">
-        <div className="flex flex-col items-start text-left max-w-lg lg:max-w-xl w-full">
+      <div className="relative z-20 px-6 sm:px-8 md:px-12 max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center text-left w-full pt-28 sm:pt-32 md:pt-28 pb-24 sm:pb-28 lg:py-32 my-auto">
+        <div className="flex flex-col items-start text-left max-w-lg lg:max-w-xl w-full mt-10 sm:mt-12 md:mt-0">
           <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-5 tracking-tight leading-[1.1] font-black">
             Hi, I&apos;m Praveen{" "}
             <span className="sr-only">Wijewardana</span>

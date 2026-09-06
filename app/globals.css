@@ -19,7 +19,7 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: clip;
+  overflow-x: hidden;
 }
 
 body {
@@ -27,7 +27,7 @@ body {
   background: #0a0a0a;
   color: #111;
   font-family: var(--font-sans);
-  overflow-x: clip;
+  overflow-x: hidden;
   overscroll-behavior-x: none;
 }
 
