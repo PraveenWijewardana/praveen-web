@@ -7,7 +7,10 @@ export function About() {
   const parts = about.body.split(about.highlightName);
 
   return (
-    <section id="about" className="relative bg-[#ff2a2a] text-white pt-4 pb-28 md:pb-36">
+    <section
+      id="about"
+      className="relative bg-[#ff2a2a] text-white pt-4 pb-28 md:pb-36"
+    >
       <div className="absolute left-8 top-10 hidden md:block">
         <div className="star-burst opacity-80" />
       </div>
@@ -17,7 +20,10 @@ export function About() {
 
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <Reveal direction="left" className="flex justify-center lg:justify-start">
+          <Reveal
+            direction="left"
+            className="flex justify-center lg:justify-start"
+          >
             <div className="relative">
               <div className="absolute left-1/2 -top-16 w-[2px] h-16 bg-black/80 -translate-x-1/2 hidden md:block" />
               <div className="absolute left-1/2 -top-3 w-8 h-3 rounded-sm bg-black -translate-x-1/2 hidden md:block" />
@@ -40,7 +46,9 @@ export function About() {
             </h2>
             <p className="mt-6 text-base md:text-lg leading-relaxed text-white/95 max-w-xl">
               {parts[0]}
-              <span className="font-black text-black">{about.highlightName}</span>
+              <span className="font-black text-black">
+                {about.highlightName}
+              </span>
               {parts[1]}
             </p>
 
@@ -50,7 +58,11 @@ export function About() {
       </div>
 
       <div className="hero-wave">
-        <svg viewBox="0 0 1440 140" preserveAspectRatio="none" className="w-full h-20 md:h-28">
+        <svg
+          viewBox="0 0 1440 140"
+          preserveAspectRatio="none"
+          className="w-full h-20 md:h-28"
+        >
           <path
             fill="#ffffff"
             d="M0,80 C320,140 560,20 800,60 C1040,100 1280,130 1440,70 L1440,140 L0,140 Z"

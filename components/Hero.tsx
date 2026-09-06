@@ -64,12 +64,24 @@ export function Hero() {
     // Fallback interaction triggers in case mobile browser autoplay is restricted
     const onUserInteraction = () => {
       if (video.paused) {
-        video.play().then(() => setPlaying(true)).catch(() => {});
+        video
+          .play()
+          .then(() => setPlaying(true))
+          .catch(() => {});
       }
     };
-    window.addEventListener("touchstart", onUserInteraction, { passive: true, once: true });
-    window.addEventListener("click", onUserInteraction, { passive: true, once: true });
-    window.addEventListener("scroll", onUserInteraction, { passive: true, once: true });
+    window.addEventListener("touchstart", onUserInteraction, {
+      passive: true,
+      once: true,
+    });
+    window.addEventListener("click", onUserInteraction, {
+      passive: true,
+      once: true,
+    });
+    window.addEventListener("scroll", onUserInteraction, {
+      passive: true,
+      once: true,
+    });
 
     // Kick after intro loader removes scroll lock
     const boot = window.setTimeout(tryPlay, 100);
@@ -98,7 +110,9 @@ export function Hero() {
     v.muted = next;
     setMuted(next);
     if (v.paused) {
-      v.play().then(() => setPlaying(true)).catch(() => {});
+      v.play()
+        .then(() => setPlaying(true))
+        .catch(() => {});
     }
   };
 
@@ -154,8 +168,7 @@ export function Hero() {
       <div className="relative z-20 px-6 sm:px-8 md:px-12 max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center text-left w-full pt-28 sm:pt-32 md:pt-28 pb-24 sm:pb-28 lg:py-32 my-auto">
         <div className="flex flex-col items-start text-left max-w-lg lg:max-w-xl w-full mt-10 sm:mt-12 md:mt-0">
           <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-5 tracking-tight leading-[1.1] font-black">
-            Hi, I&apos;m Praveen{" "}
-            <span className="sr-only">Wijewardana</span>
+            Hi, I&apos;m Praveen <span className="sr-only">Wijewardana</span>
             <br />
             <span className="font-medium text-xl sm:text-3xl md:text-4xl lg:text-5xl opacity-90 block mt-1">
               {hero.role}
@@ -188,8 +201,16 @@ export function Hero() {
               aria-label="Resume"
               title="Resume"
             >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeWidth="1.8" d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeWidth="1.8"
+                  d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"
+                />
                 <path strokeWidth="1.8" d="M14 3v5h5M8 13h8M8 17h6" />
               </svg>
             </a>
