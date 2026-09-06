@@ -53,6 +53,14 @@ function requestOrigin(request: Request) {
   return siteOrigin();
 }
 
+function providerError(message: string | undefined, fallback: string) {
+  if (!message) return fallback;
+  if (/just a moment|cloudflare|cf-chl/i.test(message)) {
+    return "The current mail service is unavailable. Please try again later.";
+  }
+  return message;
+}
+
 async function sendWithResend(payload: {
   firstName: string;
   lastName: string;
@@ -129,7 +137,7 @@ async function sendWithWeb3Forms(payload: {
   if (!ok) {
     return {
       ok: false as const,
-      error: data.message || "Failed to send. Please try again.",
+      error: providerError(data.message, "Failed to send. Please try again."),
     };
   }
 
@@ -177,7 +185,7 @@ async function sendWithFormSubmit(payload: {
       ok: false as const,
       error: needsActivation
         ? `Form not activated yet — check ${contact.email} for the FormSubmit email and click Activate Form.`
-        : messageText,
+        : providerError(messageText, "Failed to send. Please try again."),
     };
   }
 
