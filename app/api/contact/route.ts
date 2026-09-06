@@ -38,6 +38,21 @@ function siteOrigin() {
   );
 }
 
+function requestOrigin(request: Request) {
+  const origins = [request.headers.get("origin"), request.url];
+  for (const value of origins) {
+    if (!value) continue;
+
+    try {
+      return new URL(value).origin;
+    } catch {
+      continue;
+    }
+  }
+
+  return siteOrigin();
+}
+
 async function sendWithResend(payload: {
   firstName: string;
   lastName: string;
@@ -127,8 +142,7 @@ async function sendWithFormSubmit(payload: {
   email: string;
   mobile: string;
   message: string;
-}) {
-  const origin = siteOrigin();
+}, origin: string) {
 
   const res = await fetch(
     `https://formsubmit.co/ajax/${encodeURIComponent(contact.email)}`,
@@ -235,7 +249,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: true });
     }
 
-    const formSubmitResult = await sendWithFormSubmit(payload);
+    const formSubmitResult = await sendWithFormSubmit(payload, requestOrigin(request));
     if (!formSubmitResult.ok) {
       return NextResponse.json(
         { ok: false, error: formSubmitResult.error },
