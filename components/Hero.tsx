@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { hero, socials } from "@/data/portfolio";
 
 function SocialIcon({ label }: { label: string }) {
-  const common = "w-5 h-5 md:w-6 md:h-6";
+  const common = "w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6";
   switch (label) {
     case "GitHub":
       return (
@@ -38,7 +38,7 @@ function SocialIcon({ label }: { label: string }) {
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [muted, setMuted] = useState(true);
-  const [playing, setPlaying] = useState(false);
+  const [, setPlaying] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -51,9 +51,7 @@ export function Hero() {
     const tryPlay = () => {
       const p = video.play();
       if (p) {
-        p.then(() => setPlaying(true)).catch(() => {
-          // Autoplay may be blocked until the loader finishes — retry shortly.
-        });
+        p.then(() => setPlaying(true)).catch(() => {});
       }
     };
 
@@ -62,6 +60,16 @@ export function Hero() {
     video.addEventListener("loadeddata", tryPlay);
     video.addEventListener("canplay", tryPlay);
     video.addEventListener("playing", onPlaying);
+
+    // Fallback interaction triggers in case mobile browser autoplay is restricted
+    const onUserInteraction = () => {
+      if (video.paused) {
+        video.play().then(() => setPlaying(true)).catch(() => {});
+      }
+    };
+    window.addEventListener("touchstart", onUserInteraction, { passive: true, once: true });
+    window.addEventListener("click", onUserInteraction, { passive: true, once: true });
+    window.addEventListener("scroll", onUserInteraction, { passive: true, once: true });
 
     // Kick after intro loader removes scroll lock
     const boot = window.setTimeout(tryPlay, 100);
@@ -74,6 +82,9 @@ export function Hero() {
       window.clearTimeout(boot);
       window.clearTimeout(retry);
       window.clearTimeout(retryLate);
+      window.removeEventListener("touchstart", onUserInteraction);
+      window.removeEventListener("click", onUserInteraction);
+      window.removeEventListener("scroll", onUserInteraction);
       video.removeEventListener("loadeddata", tryPlay);
       video.removeEventListener("canplay", tryPlay);
       video.removeEventListener("playing", onPlaying);
@@ -91,11 +102,42 @@ export function Hero() {
     }
   };
 
+  const soundIcon = muted ? (
+    <svg
+      className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white group-hover:text-black transition-colors"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25m-10.5-6L4.5 9H1.5v6h3l4.5 3.75V5.25z"
+      />
+    </svg>
+  ) : (
+    <svg
+      className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white group-hover:text-black transition-colors"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      viewBox="0 0 24 24"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28-.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"
+      />
+    </svg>
+  );
+
   return (
     <section
       id="home"
-      className="relative w-full h-screen overflow-hidden bg-black text-white"
+      className="relative w-full min-h-screen min-h-[100svh] overflow-hidden bg-[#0a0a0a] text-white flex flex-col justify-center"
     >
+      {/* Background video: responsive focal position keeps subject framed on phones, tablets, and widescreen */}
       <video
         ref={videoRef}
         src={hero.video}
@@ -104,49 +146,52 @@ export function Hero() {
         muted
         playsInline
         preload="auto"
-        poster={playing ? undefined : hero.portrait}
         aria-label="Praveen Wijewardana — Software Engineer intro reel"
-        className="absolute top-0 left-0 w-full h-full object-cover object-center z-0"
+        className="absolute top-0 left-0 w-full h-full object-cover object-[78%_center] sm:object-[75%_center] lg:object-center z-0 pointer-events-none"
       />
 
-      <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-transparent z-10 pointer-events-none" />
+      {/* Directional gradients: vertical dark vignette on mobile/tablets, horizontal fade on desktop */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-black/90 lg:bg-gradient-to-r lg:from-black/90 lg:via-black/45 lg:to-transparent z-10 pointer-events-none" />
 
-      <div className="absolute inset-0 z-20 px-6 md:px-12 max-w-7xl mx-auto flex flex-col md:flex-row justify-center md:justify-between items-start text-left w-full h-full pt-28 md:pt-[12%]">
+      {/* Main hero content */}
+      <div className="relative z-20 px-6 sm:px-8 md:px-12 max-w-7xl mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center text-left w-full pt-24 pb-24 sm:pt-28 sm:pb-28 lg:py-32 my-auto">
         <div className="flex flex-col items-start text-left max-w-lg lg:max-w-xl w-full">
-          <h1 className="text-white text-4xl sm:text-5xl md:text-6xl mb-5 tracking-tight leading-[1.05] font-black">
+          <h1 className="text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl mb-4 sm:mb-5 tracking-tight leading-[1.1] font-black">
             Hi, I&apos;m Praveen{" "}
             <span className="sr-only">Wijewardana</span>
             <br />
-            <span className="font-medium">{hero.role}</span>
+            <span className="font-medium text-xl sm:text-3xl md:text-4xl lg:text-5xl opacity-90 block mt-1">
+              {hero.role}
+            </span>
           </h1>
 
-          <p className="text-white/90 text-sm md:text-base leading-relaxed max-w-md mb-8">
+          <p className="text-white/90 text-sm sm:text-base leading-relaxed max-w-md mb-6 sm:mb-8">
             {hero.bio}
           </p>
 
           <div className="flex flex-row items-center gap-3 sm:gap-4 w-full flex-wrap">
             <a
               href={hero.primaryCta.href}
-              className="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm text-black hover:-translate-y-0.5 transition-transform"
+              className="inline-flex items-center justify-center rounded-full bg-white px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-black hover:-translate-y-0.5 transition-transform shadow-md"
             >
               {hero.primaryCta.label}
             </a>
             <a
               href={hero.secondaryCta.href}
-              className="inline-flex items-center justify-center rounded-full border border-white/60 px-6 py-3 text-sm text-white hover:bg-white hover:text-black transition-colors"
+              className="inline-flex items-center justify-center rounded-full border border-white/60 px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm text-white hover:bg-white hover:text-black transition-colors backdrop-blur-sm"
             >
               {hero.secondaryCta.label}
             </a>
           </div>
 
-          <div className="mt-8 flex items-center gap-3">
+          <div className="mt-6 sm:mt-8 flex items-center gap-2.5 sm:gap-3 flex-wrap">
             <a
               href={hero.resumeHref}
-              className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-black/20 border border-white/20 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-white hover:text-black transition-colors"
+              className="w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-full bg-black/40 border border-white/20 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-white hover:text-black transition-colors"
               aria-label="Resume"
               title="Resume"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeWidth="1.8" d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z" />
                 <path strokeWidth="1.8" d="M14 3v5h5M8 13h8M8 17h6" />
               </svg>
@@ -157,7 +202,7 @@ export function Hero() {
                 href={s.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-11 h-11 md:w-12 md:h-12 rounded-full bg-black/20 border border-white/20 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-white hover:text-black transition-colors"
+                className="w-10 h-10 sm:w-11 sm:h-11 lg:w-12 lg:h-12 rounded-full bg-black/40 border border-white/20 backdrop-blur-md flex items-center justify-center text-white/90 hover:bg-white hover:text-black transition-colors"
                 aria-label={s.label}
                 title={s.label}
               >
@@ -167,49 +212,41 @@ export function Hero() {
           </div>
         </div>
 
-        <button
-          type="button"
-          onClick={toggleMute}
-          className="group absolute right-6 md:right-0 top-1/2 -translate-y-1/2 md:relative md:top-auto md:translate-y-0 md:self-center flex flex-col items-center"
-        >
-          <div className="w-14 h-14 md:w-16 md:h-16 rounded-full border border-white/20 bg-black/20 backdrop-blur-md flex justify-center items-center group-hover:scale-105 group-hover:bg-white group-hover:border-white transition-all duration-300 shadow-xl">
-            {muted ? (
-              <svg
-                className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-black transition-colors"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25m-10.5-6L4.5 9H1.5v6h3l4.5 3.75V5.25z"
-                />
-              </svg>
-            ) : (
-              <svg
-                className="w-5 h-5 md:w-6 md:h-6 text-white group-hover:text-black transition-colors"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28-.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z"
-                />
-              </svg>
-            )}
-          </div>
-          <span className="text-white text-[9px] md:text-[11px] tracking-widest uppercase opacity-60 group-hover:opacity-100 transition-opacity mt-1">
-            {muted ? "Unmute Reel" : "Mute Sound"}
-          </span>
-        </button>
+        {/* Desktop Sound toggle: placed in right column */}
+        <div className="hidden lg:flex flex-col items-center self-center">
+          <button
+            type="button"
+            onClick={toggleMute}
+            className="group flex flex-col items-center"
+            aria-label={muted ? "Unmute video reel" : "Mute video sound"}
+          >
+            <div className="w-16 h-16 rounded-full border border-white/25 bg-black/30 backdrop-blur-md flex justify-center items-center group-hover:scale-105 group-hover:bg-white group-hover:border-white transition-all duration-300 shadow-xl">
+              {soundIcon}
+            </div>
+            <span className="text-white text-[11px] tracking-widest uppercase opacity-75 group-hover:opacity-100 transition-opacity mt-1.5 whitespace-nowrap">
+              {muted ? "Unmute Reel" : "Mute Sound"}
+            </span>
+          </button>
+        </div>
       </div>
 
-      <div className="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+      {/* Mobile & Tablet Sound toggle: pinned to bottom-right of the hero section */}
+      <button
+        type="button"
+        onClick={toggleMute}
+        className="lg:hidden absolute bottom-6 right-6 sm:bottom-8 sm:right-8 z-30 flex flex-col items-center group"
+        aria-label={muted ? "Unmute video reel" : "Mute video sound"}
+      >
+        <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full border border-white/25 bg-black/50 backdrop-blur-md flex justify-center items-center group-hover:scale-105 group-active:scale-95 transition-all shadow-xl">
+          {soundIcon}
+        </div>
+        <span className="text-white text-[8px] sm:text-[9px] tracking-widest uppercase opacity-75 mt-1 whitespace-nowrap">
+          {muted ? "Unmute" : "Mute"}
+        </span>
+      </button>
+
+      {/* Scroll indicator for large screens */}
+      <div className="hidden lg:block absolute bottom-8 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
         <div className="animate-bounce">
           <svg
             className="w-5 h-5 text-white opacity-70"
