@@ -10,6 +10,23 @@ type ContactBody = {
   website?: string; // honeypot
 };
 
+type ProviderResponse = {
+  success?: boolean | string;
+  id?: string;
+  message?: string;
+};
+
+async function readProviderResponse(response: Response): Promise<ProviderResponse> {
+  const text = await response.text();
+  if (!text) return {};
+
+  try {
+    return JSON.parse(text) as ProviderResponse;
+  } catch {
+    return { message: text.slice(0, 300) };
+  }
+}
+
 function isEmail(value: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
@@ -56,7 +73,7 @@ async function sendWithResend(payload: {
     }),
   });
 
-  const data = (await res.json()) as { id?: string; message?: string };
+  const data = await readProviderResponse(res);
   if (!res.ok) {
     return { ok: false as const, error: data.message || "Failed to send message." };
   }
@@ -91,7 +108,7 @@ async function sendWithWeb3Forms(payload: {
     }),
   });
 
-  const data = (await res.json()) as { success?: boolean | string; message?: string };
+  const data = await readProviderResponse(res);
   const ok = data.success === true || data.success === "true";
 
   if (!ok) {
@@ -136,7 +153,7 @@ async function sendWithFormSubmit(payload: {
     },
   );
 
-  const data = (await res.json()) as { success?: boolean | string; message?: string };
+  const data = await readProviderResponse(res);
   const ok = data.success === true || data.success === "true";
   const messageText = data.message || "Failed to send. Please try again.";
 
@@ -227,7 +244,8 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (error) {
+    console.error("Contact form provider request failed", error);
     return NextResponse.json(
       { ok: false, error: "Something went wrong. Please try again." },
       { status: 500 },
